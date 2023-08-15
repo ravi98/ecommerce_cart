@@ -1,0 +1,29 @@
+{% extends "social/base.html" %}
+{% block title %}
+  Checkout
+{% endblock %}
+{% block content %}
+  <h1>Checkout</h1>
+  <div class="order-info">
+    <h3>Your order</h3>
+    <ul>
+      {% for item in cart %}
+        <li>
+          {{ item.quantity }}x {{ item.product.name }}
+          <span>${{ item.total_price }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+    <p>Total: ${{ cart.get_total_price }}</p>
+  </div>
+  <form action="{% url "orders:order_create" %}" method="post" class="order-form">
+    <label>Select your address:</label><br>
+  
+    {% for address in addresses %}
+      <input type="radio" id="address_{{ forloop.counter }}" name="address" value="{{ address.id }}">
+      <label for="address_{{ forloop.counter }}">{{ address }}</label><br>
+    {% endfor %}
+    <p><input type="submit" value="Place order"></p>
+    {% csrf_token %}
+  </form>
+{% endblock %}
